@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 using System.Threading.Tasks;
+using System.Web.Configuration;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Owin.Security;
@@ -15,36 +18,40 @@ namespace LINELoginOIDCDemo_MVC5
     {
         public void ConfigureAuth(IAppBuilder app)
         {
+            //IdentityModelEventSource.ShowPII = true;
+
             app.SetDefaultSignInAsAuthenticationType(CookieAuthenticationDefaults.AuthenticationType);
 
             app.UseCookieAuthentication(new CookieAuthenticationOptions());
 
             app.UseOpenIdConnectAuthentication(new OpenIdConnectAuthenticationOptions
             {
-                Authority = "https://localhost:44349/",
+                Authority = "https://access.line.me/",
 
-                ClientId = "mvc",
-                ClientSecret = "901564A5-E7FE-42CB-B10D-61EF6A8F3654",
+                ClientId = WebConfigurationManager.AppSettings["OpenIDConnect:ClientID"],
+                ClientSecret = WebConfigurationManager.AppSettings["OpenIDConnect:ClientSecret"],
 
-                RedirectUri = "https://localhost:44378/signin-oidc",
+                RedirectUri = WebConfigurationManager.AppSettings["OpenIDConnect:RedirectUri"],
 
                 RedeemCode = true,
 
                 ResponseMode = OpenIdConnectResponseMode.Query,
                 ResponseType = OpenIdConnectResponseType.Code,
 
-                Scope = "openid profile email roles",
+                Scope = "openid profile email",
 
                 SecurityTokenValidator = new JwtSecurityTokenHandler
                 {
                     // Disable the built-in JWT claims mapping feature.
-                    InboundClaimTypeMap = new Dictionary<string, string>()
+                    InboundClaimTypeMap = new Dictionary<string, string>(),
+
                 },
 
                 TokenValidationParameters = new TokenValidationParameters
                 {
                     NameClaimType = "name",
-                    RoleClaimType = "role"
+                    RoleClaimType = "role",
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(WebConfigurationManager.AppSettings["OpenIDConnect:ClientSecret"])),
                 },
 
                 Notifications = new OpenIdConnectAuthenticationNotifications
