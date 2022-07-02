@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Optimization;
 
-namespace Mortis.Client
+namespace LINELoginOIDCDemo_MVC5
 {
     public class BundleConfig
     {

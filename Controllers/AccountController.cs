@@ -4,7 +4,7 @@ using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OpenIdConnect;
 
-namespace Mortis.Client.Controllers
+namespace LINELoginOIDCDemo_MVC5.Controllers
 {
     public class AccountController : Controller
     {

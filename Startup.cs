@@ -1,6 +1,6 @@
 ﻿using Owin;
 
-namespace Mortis.Client
+namespace LINELoginOIDCDemo_MVC5
 {
     public partial class Startup
     {

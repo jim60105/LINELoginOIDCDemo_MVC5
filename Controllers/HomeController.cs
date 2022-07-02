@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace Mortis.Client.Controllers
+namespace LINELoginOIDCDemo_MVC5.Controllers
 {
     [Authorize]
     public class HomeController : Controller
