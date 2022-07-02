@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.Owin.Security;
+using Microsoft.Owin.Security.Cookies;
+using Microsoft.Owin.Security.OpenIdConnect;
 using System.Web;
 using System.Web.Mvc;
 
@@ -14,18 +14,20 @@ namespace LINELoginOIDCDemo_MVC5.Controllers
             return View();
         }
 
-        public ActionResult About()
+        public ActionResult Privacy()
         {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
+            var userClaims = User.Identity as System.Security.Claims.ClaimsIdentity;
+            return View(userClaims);
         }
 
-        public ActionResult Contact()
+        [AllowAnonymous]
+        public void Logout()
         {
-            ViewBag.Message = "Your contact page.";
+            string callbackUrl = Url.Action("Index", "Home", routeValues: null, protocol: Request.Url.Scheme);
 
-            return View();
+            HttpContext.GetOwinContext().Authentication.SignOut(
+                new AuthenticationProperties { RedirectUri = callbackUrl },
+                OpenIdConnectAuthenticationDefaults.AuthenticationType, CookieAuthenticationDefaults.AuthenticationType);
         }
     }
 }

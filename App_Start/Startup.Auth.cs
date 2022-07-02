@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.Configuration;
-using Microsoft.IdentityModel.Logging;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+﻿using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OpenIdConnect;
 using Owin;
+using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using System.Threading.Tasks;
+using System.Web.Configuration;
 
 namespace LINELoginOIDCDemo_MVC5
 {
@@ -43,8 +42,7 @@ namespace LINELoginOIDCDemo_MVC5
                 SecurityTokenValidator = new JwtSecurityTokenHandler
                 {
                     // Disable the built-in JWT claims mapping feature.
-                    InboundClaimTypeMap = new Dictionary<string, string>(),
-
+                    InboundClaimTypeMap = new Dictionary<string, string>()
                 },
 
                 TokenValidationParameters = new TokenValidationParameters
