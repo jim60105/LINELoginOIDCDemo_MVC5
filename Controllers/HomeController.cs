@@ -1,7 +1,7 @@
 ﻿using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.Cookies;
-using Microsoft.Owin.Security.OpenIdConnect;
+using System.Linq;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Mvc;
 
 namespace LINELoginOIDCDemo_MVC5.Controllers
@@ -21,13 +21,17 @@ namespace LINELoginOIDCDemo_MVC5.Controllers
         }
 
         [AllowAnonymous]
-        public void Logout()
+        public ActionResult Logout()
         {
-            string callbackUrl = Url.Action("Index", "Home", routeValues: null, protocol: Request.Url.Scheme);
-
-            HttpContext.GetOwinContext().Authentication.SignOut(
-                new AuthenticationProperties { RedirectUri = callbackUrl },
-                OpenIdConnectAuthenticationDefaults.AuthenticationType, CookieAuthenticationDefaults.AuthenticationType);
+            if (Request.IsAuthenticated)
+            {
+                HttpContext.GetOwinContext().Authentication.SignOut(
+                    new AuthenticationProperties() { RedirectUri = WebConfigurationManager.AppSettings["OpenIDConnect:RedirectUri"], AllowRefresh = true },
+                    HttpContext.GetOwinContext()
+                               .Authentication.GetAuthenticationTypes()
+                               .Select(o => o.AuthenticationType).ToArray());
+            }
+            return RedirectToAction("Index");
         }
     }
 }
